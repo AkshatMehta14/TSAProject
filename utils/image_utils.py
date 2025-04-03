@@ -33,7 +33,7 @@ def display_image_with_caption(url, caption=None, width=None, use_column=False):
     if image:
         if use_column:
             with st.container():
-                st.image(image, caption=caption, use_column_width=True)
+                st.image(image, caption=caption, use_container_width=True)
         else:
             st.image(image, caption=caption, width=width)
         return True

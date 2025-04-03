@@ -33,8 +33,7 @@ def order_form_page():
             
             # Spice level selection with slider
             spice_options = ["Mild", "Medium", "Hot"]
-            spice_index = st.slider("Spice Level", 0, 2, 1, 
-                               format_func=lambda x: spice_options[x])
+            spice_index = st.slider("Spice Level", 0, 2, 1)
             form_spice = spice_options[spice_index]
             
             # Dietary restrictions multiselect
