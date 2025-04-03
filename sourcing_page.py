@@ -245,8 +245,12 @@ def sourcing_page():
             Join us for a meal that's not just delicious, but also helps support sustainable farming practices
             and reduces environmental impact. Every bite makes a difference.
         </p>
-        <div style="display: inline-block; background: white; color: #2E8B57; padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: 1.1rem;">
-            Make a Reservation
-        </div>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Adding a Streamlit button that actually works
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("🍽️ Make a Reservation", use_container_width=True, key="reserve_table_sourcing"):
+            st.markdown("[Redirecting to reservation page...](https://www.opentable.com)")
+            # You could also use st.experimental_set_query_params() or st.experimental_rerun() in more complex scenarios

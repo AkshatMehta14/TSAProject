@@ -191,13 +191,17 @@ def restaurant_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Call to action
+    # Call to action with clickable button
     st.markdown("""
     <div style="background: linear-gradient(135deg, #2E8B57 0%, #3CB371 100%); padding: 40px; border-radius: 10px; text-align: center; margin-top: 40px; color: white;">
         <h2 style="font-size: 2rem; margin-bottom: 15px;">Experience Verdura Today</h2>
         <p style="font-size: 1.2rem; margin-bottom: 25px;">Join us for a meal that nourishes both body and planet. Reservations recommended but walk-ins always welcome.</p>
-        <div style="background: white; display: inline-block; padding: 10px 25px; border-radius: 30px; font-weight: bold; color: #2E8B57; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease;">
-            Book A Table
-        </div>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Adding a Streamlit button that actually works
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("📅 Book A Table", use_container_width=True, key="reserve_table_home"):
+            st.markdown("[Redirecting to reservation page...](https://www.opentable.com)")
+            # You could also use st.experimental_set_query_params() or st.experimental_rerun() in more complex scenarios

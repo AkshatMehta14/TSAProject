@@ -131,13 +131,16 @@ def order_form_page():
         <div style="margin-top: 40px; text-align: center; padding: 30px; background: linear-gradient(135deg, #f0f5f0 0%, #e8f5e9 100%); border-radius: 10px;">
             <h3 style="color: #2E8B57; margin-bottom: 15px;">Ready to experience these flavors?</h3>
             <p style="margin-bottom: 25px;">Visit us today or place an online order for pickup or delivery.</p>
-            <div style="display: flex; justify-content: center; gap: 20px;">
-                <div style="background: #2E8B57; color: white; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;">
-                    Reserve a Table
-                </div>
-                <div style="background: white; color: #2E8B57; border: 2px solid #2E8B57; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;">
-                    Order Online
-                </div>
-            </div>
         </div>
         """, unsafe_allow_html=True)
+        
+        # Adding actual functioning buttons
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("📅 Reserve a Table", use_container_width=True, key="reserve_table_order"):
+                st.markdown("[Redirecting to reservation page...](https://www.opentable.com)")
+        
+        with col2:
+            if st.button("🥡 Order Online", use_container_width=True, key="order_online"):
+                st.markdown("[Redirecting to online ordering...](https://www.doordash.com)")
+        
