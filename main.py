@@ -1,259 +1,264 @@
 import streamlit as st
 from info import sample_dishes, generate_dish_description
+import restaurant_page
+import menu_page
+import order_form_page
+import sourcing_page
+import os
+from utils.image_utils import display_image_with_caption
 
-# Inject custom CSS for enhanced UI and simple animations
+# Set page config first
+st.set_page_config(
+    page_title="Verdura - Farm to Table Vegetarian",
+    page_icon="🌱",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Load and inject custom CSS
+with open("assets/style.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Inject font from Google Fonts
+st.markdown(
+    """
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    """,
+    unsafe_allow_html=True
+)
+
+# Animate elements with CSS 
 st.markdown(
     """
     <style>
-    .stForm {
-        background-color: #f9f9f9;
-        padding: 20px;
-        border-radius: 10px;
-        animation: fadeIn 2s;
+    @keyframes slideInFromLeft {
+        0% { transform: translateX(-30px); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
     }
+    
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        0% { opacity: 0; }
+        100% { opacity: 1; }
     }
-    .header-title {
-        color: #2E8B57;
-        font-size: 3rem;
-        font-weight: bold;
-        text-align: center;
-        margin-top: 20px;
+    
+    .sidebar .element-container {
+        animation: slideInFromLeft 0.5s ease-out forwards;
     }
-    .page-header {
-        color: #2E8B57;
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 20px;
+    
+    .stButton button {
+        transition: all 0.3s ease;
+    }
+    
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    /* Animated sidebar highlight */
+    .sidebar .element-container:not(:first-child) {
+        transition: all 0.2s ease;
+    }
+    
+    .sidebar .element-container:hover:not(:first-child) {
+        background-color: rgba(46, 139, 87, 0.1);
+        border-radius: 5px;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Sidebar navigation using radio buttons
-st.sidebar.header("Navigation")
-page = st.sidebar.radio("Go to", ["Restaurant", "Menu", "Order Form", "Food Sourcing"])
+# Add a logo to the sidebar
+logo_html = """
+<div style="display: flex; justify-content: center; margin-bottom: 20px;">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="48" fill="#2E8B57" stroke="#FFF" stroke-width="2"/>
+        <text x="50" y="58" font-family="Georgia" font-size="24" font-weight="bold" text-anchor="middle" fill="#FFF">V</text>
+        <path d="M30,70 Q50,30 70,70" fill="none" stroke="#FFF" stroke-width="2"/>
+        <path d="M25,40 Q40,60 55,40" fill="none" stroke="#FFF" stroke-width="1.5"/>
+        <path d="M45,40 Q60,60 75,40" fill="none" stroke="#FFF" stroke-width="1.5"/>
+    </svg>
+</div>
+<h2 style="text-align: center; color: #2E8B57; margin-top: 0; font-family: 'Georgia', serif;">Verdura</h2>
+"""
 
-# --- Page Functions --- #
-def restaurant_page():
-    st.markdown("""
-        <style>
-        .hero {
-            background: linear-gradient(to right, #e8f5e9, #ffffff);
-            padding: 50px 30px;
-            border-radius: 20px;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #2E7D32;
-            margin-bottom: 0.5em;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto;
-            color: #555;
-        }
-        .section {
-            padding: 40px 10px;
-        }
-        .section h2 {
-            color: #388E3C;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .section p {
-            font-size: 1.05rem;
-            color: #444;
-            max-width: 800px;
-        }
-        .quote {
-            font-style: italic;
-            color: #777;
-            margin-top: 20px;
-        }
-        </style>
-    """, unsafe_allow_html=True)
+st.sidebar.markdown(logo_html, unsafe_allow_html=True)
+st.sidebar.markdown("<div style='height: 20px'></div>", unsafe_allow_html=True)
 
-    # Hero Section
-    st.markdown("""
-    <div class='hero'>
-        <h1>Welcome to Verdura 🍃</h1>
-        <p>A global vegetarian experience rooted in sustainability, culture, and flavor. More than a restaurant — it's a movement.</p>
+# Sidebar navigation using custom buttons
+st.sidebar.markdown("### Navigation")
+
+# Custom CSS for glowing navigation buttons with animations
+st.markdown("""
+<style>
+/* Glowing Button Styles */
+.nav-button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: linear-gradient(135deg, #2E8B57, #3AA76D);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+.nav-button:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    z-index: 1;
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.nav-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(46, 139, 87, 0.6);
+}
+
+.nav-button:hover:before {
+    animation: glowingEffect 1.5s infinite;
+}
+
+@keyframes glowingEffect {
+    0% {
+        transform: rotate(45deg) translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: rotate(45deg) translateX(100%);
+        opacity: 0;
+    }
+}
+
+.nav-button.active {
+    background: linear-gradient(135deg, #1A6B37, #2E8B57);
+    box-shadow: 0 0 15px rgba(46, 139, 87, 0.5);
+}
+
+/* Button shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.nav-button:active {
+    animation: shake 0.3s ease;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Session state to track page
+if 'page' not in st.session_state:
+    st.session_state.page = "Home"
+
+# Create custom button styling using Streamlit components
+# Navigation buttons with actual click functionality
+def nav_button(label, page_name):
+    if st.sidebar.button(label, key=f"nav_{page_name}", 
+                        use_container_width=True,
+                        type="primary" if st.session_state.page == page_name else "secondary"):
+        st.session_state.page = page_name
+        st.rerun()  # Rerun the app to refresh the UI
+
+# Add custom animated buttons with actual click functionality
+nav_button("🏠 Home", "Home")
+nav_button("🍽️ Menu", "Menu") 
+nav_button("🛒 Order", "Order Form")
+nav_button("🌱 Sourcing", "Food Sourcing")
+
+# The page variable is now controlled by session state
+page = st.session_state.page
+
+# Add a subtle decoration to the sidebar
+st.sidebar.markdown(
+    """
+    <div style="padding: 20px 0; text-align: center; color: #777; font-size: 0.85rem;">
+        <div style="margin-bottom: 10px;">🌱 Farm to Table 🌱</div>
+        <div style="width: 100%; height: 1px; background: linear-gradient(to right, transparent, #2E8B57, transparent);"></div>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
-    # Mission Section
-    st.markdown("""
-    <div class='section'>
-        <h2>🌱 Our Mission</h2>
-        <p>
-            At Verdura, we believe that plant-based food can be just as indulgent as it is intentional. 
-            Our mission is to redefine what it means to eat consciously — one unforgettable dish at a time.
-        </p>
-        <p>
-            We're not just serving meals — we're building a movement toward ecological balance, animal welfare, 
-            and global culinary connection. Our commitment to authenticity, ethics, and artistry shapes everything we do.
-        </p>
+# Add hours and location to sidebar
+st.sidebar.markdown("### Hours")
+st.sidebar.markdown("""
+- **Monday - Friday**: 11am - 10pm
+- **Saturday**: 10am - 11pm
+- **Sunday**: 10am - 9pm
+""")
+
+st.sidebar.markdown("### Location")
+st.sidebar.markdown("123 Green Street, Eco City")
+
+# Contact section in sidebar
+st.sidebar.markdown("### Contact")
+st.sidebar.markdown("📞 (555) 123-4567")
+st.sidebar.markdown("📧 hello@verdura.com")
+
+# Add social media icons to sidebar
+st.sidebar.markdown(
+    """
+    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 30px;">
+        <a href="#" style="color: #2E8B57; font-size: 24px;">
+            <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" style="color: #2E8B57; font-size: 24px;">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" style="color: #2E8B57; font-size: 24px;">
+            <i class="fab fa-twitter"></i>
+        </a>
     </div>
-    """, unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
-    # Why Vegetarian Section
-    st.markdown("""
-    <div class='section'>
-        <h2>🥦 Why Vegetarian?</h2>
-        <p>
-            Choosing a vegetarian lifestyle is one of the most powerful steps you can take for the planet, your health, 
-            and the lives of countless animals. Each dish at Verdura celebrates this choice through flavor and form.
-        </p>
-        <p>
-            Studies link plant-based diets to lower risks of chronic illness. Environmentally, it reduces carbon emissions, 
-            water use, and deforestation. But it’s more than just stats — it’s about discovering new ingredients, bold spices, 
-            and untold culinary stories.
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Story Section
-    st.markdown("""
-    <div class='section'>
-        <h2>📖 Our Story</h2>
-        <p>
-            Verdura began as a vision shared by three dreamers:
-            Nina, a regenerative farmer; Raj, a spice alchemist from Mumbai; and Elena, a Mediterranean food critic on a quest for soul food.
-        </p>
-        <p>
-            They came together not just to start a restaurant, but to create a sanctuary. 
-            A space where purpose meets plate, and every meal tells a story — about people, place, and planet.
-        </p>
-        <p class='quote'>
-            "Vegetarianism is not a restriction — it's a rediscovery."
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-def menu_page():
-    st.header("Our Full Menu")
-    for dish in sample_dishes:
-        st.subheader(f"{dish['name']} — ${dish['price']:.2f}")
-        st.markdown(f"*Origin:* **{dish['origin']}**")
-        st.markdown(f"{dish['description']}")
-        st.markdown("---")
-
-
-def order_form_page():
-    st.header("Order Form & Recommendations")
-    with st.form(key='menu_form', clear_on_submit=True):
-        st.markdown("<div class='page-header'>Fill in your preferences</div>", unsafe_allow_html=True)
-        st.selectbox("Choose Your Preference", ["Vegetarian"])
-        form_cuisine = st.selectbox("Favorite Cuisine", [
-            "Italian", "Indian", "Mexican", "Asian", "Japanese", "Korean", "Thai",
-            "Mediterranean", "Lebanese", "Spanish", "German", "British", "North African",
-            "American", "Brazilian", "Middle Eastern", "Caribbean", "Australian", "French", "Indonesian"
-        ])
-        form_spice = st.selectbox("Spice Level", ["Mild", "Medium", "Hot"])
-        submitted = st.form_submit_button(label="Get Recommendations")
-    
-    if submitted:
-        recommended = [dish for dish in sample_dishes if dish["origin"].lower() == form_cuisine.lower()]
-        if not recommended:
-            recommended = sample_dishes
-        st.header("Recommended Dishes")
-        for dish in recommended:
-            st.subheader(dish["name"])
-            st.markdown(f"**Origin:** {dish['origin']}")
-            with st.spinner(f"Generating details for {dish['name']}..."):
-                description = generate_dish_description(dish["name"], form_cuisine, form_spice)
-            st.markdown(f"**Details:** {description}")
-
-import streamlit.components.v1 as components
-
-def sourcing_page():
-    st.markdown("<div class='header-title'>From Farm to Table 🌾</div>", unsafe_allow_html=True)
-
-    stages = [
-        {
-            "title": "🌱 Sowing & Growing",
-            "text": """
-                It all begins on lush, organic farmland where the soil is nourished using compost and natural fertilizers.
-                Seeds are chosen for their biodiversity, and crops are rotated to restore the earth — not deplete it.
-            """,
-            "vanta": "waves",
-            "color": "#88cc88"
-        },
-        {
-            "title": "🐓 Ethical Animal Enclosures",
-            "text": """
-                Our vegetarian philosophy extends to protecting all life. Birds and animals are not caged — they roam free in open-air sanctuaries,
-                contributing to natural compost cycles and pest control. The presence of birds symbolizes balance, not exploitation.
-            """,
-            "vanta": "birds",
-            "color": "#cce5ff"
-        },
-        {
-            "title": "☁️ Aerial Delivery Routes",
-            "text": """
-                When ingredients travel, they fly efficiently. Some rare spices and heirloom grains are delivered via air cargo along curated green routes —
-                flights that offset carbon emissions and optimize fuel efficiency. It's not just fast — it's thoughtful.
-            """,
-            "vanta": "clouds",
-            "color": "#ddeeff"
-        },
-        {
-            "title": "🔥 Cooking in a Tandoor",
-            "text": """
-                Back in the kitchen, ingredients meet fire. We slow-roast vegetables in traditional clay tandoors at 900°F to caramelize flavor while preserving nutrients.
-                Foggy heat rises, spices sizzle — and your dish begins its transformation into magic.
-            """,
-            "vanta": "fog",
-            "color": "#ffcc99"
-        },
-        {
-            "title": "🌍 Served to You with Purpose",
-            "text": """
-                Finally, the dish arrives at your table — hot, ethical, and fully traceable. 
-                Our farm-to-table system reduces emissions, eliminates waste, and supports a regional food economy. 
-                Every plate you enjoy is a vote for sustainability.
-            """,
-            "vanta": "globe",
-            "color": "#222222"  # Dark background for globe effect
-        },
-    ]
-
-    for stage in stages:
-        st.subheader(stage["title"])
-        st.write(stage["text"])
-        components.html(f"""
-            <div id="vanta-{stage["vanta"]}" style="width: 100%; height: 300px; background-color: {stage["color"]};"></div>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.{stage["vanta"]}.min.js"></script>
-            <script>
-              VANTA.{stage["vanta"].upper()}({{
-                el: "#vanta-{stage["vanta"]}",
-                mouseControls: true,
-                touchControls: true,
-                minHeight: 300.00,
-                minWidth: 200.00,
-                scale: 1.0,
-                scaleMobile: 1.0
-              }});
-            </script>
-        """, height=300)
-        st.markdown("---")
-
+# Import Font Awesome for icons
+st.markdown(
+    """
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    """,
+    unsafe_allow_html=True
+)
 
 # --- Page Routing --- #
-if page == "Restaurant":
-    restaurant_page()
+if page == "Home":
+    restaurant_page.restaurant_page()
 elif page == "Menu":
-    menu_page()
+    menu_page.menu_page()
 elif page == "Order Form":
-    order_form_page()
+    order_form_page.order_form_page()
 elif page == "Food Sourcing":
-    sourcing_page()
+    sourcing_page.sourcing_page()
+
+# Footer
+st.markdown(
+    """
+    <footer style="margin-top: 70px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; color: #777; font-size: 0.9rem;">
+        <div>Verdura Farm to Table Vegetarian Restaurant © 2023</div>
+        <div style="margin-top: 5px;">🌱 Nourishing People & Planet 🌱</div>
+    </footer>
+    """,
+    unsafe_allow_html=True
+)
