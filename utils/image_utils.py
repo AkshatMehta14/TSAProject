@@ -160,20 +160,28 @@ def dish_card(dish, image_url=None):
     """
     
     # Build the card HTML with spice indicator
+    # Make sure to escape HTML in the description to prevent code from showing
+    import html
+    escaped_description = html.escape(dish['description'])
+    
     card_html = f"""
     <div class="dish-card" style="transition: transform 0.3s ease; animation: cardEnter 0.5s ease-out;">
         <div class="dish-content">
             <h3 class="dish-name">{dish['name']} <span class="dish-price">${dish['price']:.2f}</span></h3>
             <div class="dish-origin">Origin: {dish['origin']}</div>
             {spice_indicator}
-            <p class="dish-description">{dish['description']}</p>
+            <p class="dish-description">{escaped_description}</p>
         </div>
     """
     
     if image_url:
+        # Make sure to escape the dish name as it will be used in the alt attribute
+        escaped_dish_name = html.escape(dish['name'])
+        
+        # Format the image HTML properly
         card_html += f"""
         <div class="dish-image-container">
-            <img src="{image_url}" alt="{dish['name']}" class="dish-image" style="transition: all 0.5s ease;">
+            <img src="{image_url}" alt="{escaped_dish_name}" class="dish-image" style="transition: all 0.5s ease;">
         </div>
         """
     
