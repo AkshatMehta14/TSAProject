@@ -83,9 +83,11 @@ def restaurant_page():
 def menu_page():
     st.header("Our Full Menu")
     for dish in sample_dishes:
-        st.subheader(dish["name"])
-        st.markdown(f"<em>Origin:</em> {dish['origin']}", unsafe_allow_html=True)
+        st.subheader(f"{dish['name']} — ${dish['price']:.2f}")
+        st.markdown(f"*Origin:* **{dish['origin']}**")
+        st.markdown(f"{dish['description']}")
         st.markdown("---")
+
 
 def order_form_page():
     st.header("Order Form & Recommendations")

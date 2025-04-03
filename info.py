@@ -1,70 +1,78 @@
-# Sample dishes list (fully vegetarian, ~60 items)
 sample_dishes = [
-    {"name": "Vegetarian Margherita Pizza", "origin": "Italian"},
-    {"name": "Vegetarian Pesto Pasta", "origin": "Italian"},
-    {"name": "Vegetarian Bruschetta", "origin": "Italian"},
-    {"name": "Vegetarian Risotto", "origin": "Italian"},
-    {"name": "Vegetarian Gnocchi", "origin": "Italian"},
-    {"name": "Chickpea Curry", "origin": "Indian"},
-    {"name": "Vegetarian Samosa", "origin": "Indian"},
-    {"name": "Vegetarian Dal", "origin": "Indian"},
-    {"name": "Vegetarian Naan", "origin": "Indian"},
-    {"name": "Vegetarian Tacos", "origin": "Mexican"},
-    {"name": "Vegetarian Quesadilla", "origin": "Mexican"},
-    {"name": "Vegetarian Enchiladas", "origin": "Mexican"},
-    {"name": "Vegetarian Guacamole", "origin": "Mexican"},
-    {"name": "Asian Stir-fry Tofu", "origin": "Asian"},
-    {"name": "Vegetarian Dumplings", "origin": "Asian"},
-    {"name": "Vegetarian Hot and Sour Soup", "origin": "Asian"},
-    {"name": "Vegetarian Sushi Rolls", "origin": "Japanese"},
-    {"name": "Vegetarian Miso Soup", "origin": "Japanese"},
-    {"name": "Vegetarian Teriyaki Tofu", "origin": "Japanese"},
-    {"name": "Vegetarian Tempura", "origin": "Japanese"},
-    {"name": "Vegetarian Bibimbap", "origin": "Korean"},
-    {"name": "Vegetarian Kimchi", "origin": "Korean"},
-    {"name": "Vegetarian Pad Thai", "origin": "Thai"},
-    {"name": "Vegetarian Green Curry", "origin": "Thai"},
-    {"name": "Vegetarian Spring Rolls", "origin": "Thai"},
-    {"name": "Vegetarian Falafel Wrap", "origin": "Mediterranean"},
-    {"name": "Vegetarian Hummus", "origin": "Mediterranean"},
-    {"name": "Vegetarian Lentil Soup", "origin": "Mediterranean"},
-    {"name": "Vegetarian Tabouleh", "origin": "Lebanese"},
-    {"name": "Vegetarian Shawarma", "origin": "Lebanese"},
-    {"name": "Vegetarian Paella", "origin": "Spanish"},
-    {"name": "Vegetarian Gazpacho", "origin": "Spanish"},
-    {"name": "Vegetarian Pretzel", "origin": "German"},
-    {"name": "Vegetarian Sauerkraut", "origin": "German"},
-    {"name": "Vegetarian Shepherd's Pie", "origin": "British"},
-    {"name": "Vegetarian Fish and Chips", "origin": "British"},
-    {"name": "Vegetarian Couscous", "origin": "North African"},
-    {"name": "Vegetarian Tagine", "origin": "North African"},
-    {"name": "Vegetarian Burger", "origin": "American"},
-    {"name": "Vegetarian Mac and Cheese", "origin": "American"},
-    {"name": "Vegetarian Burrito", "origin": "Mexican"},
-    {"name": "Vegetarian Chili", "origin": "American"},
-    {"name": "Vegetarian Feijoada", "origin": "Brazilian"},
-    {"name": "Vegetarian Acarajé", "origin": "Brazilian"},
-    {"name": "Vegetarian Mezze Platter", "origin": "Middle Eastern"},
-    {"name": "Vegetarian Baklava", "origin": "Middle Eastern"},
-    {"name": "Vegetarian Jerk Tofu", "origin": "Caribbean"},
-    {"name": "Vegetarian Callaloo", "origin": "Caribbean"},
-    {"name": "Vegetarian Avocado Toast", "origin": "Australian"},
-    {"name": "Vegetarian BBQ Skewers", "origin": "Australian"},
-    {"name": "Vegetarian Quinoa Salad", "origin": "American"},
-    {"name": "Vegetarian Stuffed Peppers", "origin": "American"},
-    {"name": "Vegetarian Frittata", "origin": "Italian"},
-    {"name": "Vegetarian Currywurst", "origin": "German"},
-    {"name": "Vegetarian Vegetable Dumplings", "origin": "Asian"},
-    {"name": "Vegetarian Spring Salad", "origin": "American"},
-    {"name": "Vegetarian Chocolate Cake", "origin": "American"},
-    {"name": "Vegetarian Fruit Tart", "origin": "French"},
-    {"name": "Vegetarian Ratatouille", "origin": "French"},
-    {"name": "Vegetarian Baguette", "origin": "French"},
-    {"name": "Vegetarian Crepe", "origin": "French"},
-    {"name": "Vegetarian Gado-Gado", "origin": "Indonesian"},
-    {"name": "Vegetarian Nasi Goreng", "origin": "Indonesian"},
-    {"name": "Vegetarian Satay", "origin": "Indonesian"}
+    {
+        "name": "Paneer Tikka Masala",
+        "origin": "Indian",
+        "description": "Grilled paneer cubes marinated in yogurt and spices, roasted in a tandoor, then simmered in a creamy tomato-based sauce.",
+        "price": 12.99
+    },
+    {
+        "name": "Vegetarian Pad Thai",
+        "origin": "Thai",
+        "description": "Rice noodles stir-fried with tofu, eggs, scallions, bean sprouts, and peanuts in a tangy tamarind sauce.",
+        "price": 11.49
+    },
+    {
+        "name": "Ratatouille",
+        "origin": "French",
+        "description": "A rustic vegetable stew made with eggplant, zucchini, bell peppers, and tomatoes, slow-cooked with Provencal herbs.",
+        "price": 13.75
+    },
+    {
+        "name": "Falafel Bowl",
+        "origin": "Middle Eastern",
+        "description": "Golden-brown falafel balls served over couscous with hummus, pickled vegetables, cucumber salad, and tahini drizzle.",
+        "price": 10.95
+    },
+    {
+        "name": "Caprese Salad",
+        "origin": "Italian",
+        "description": "Layers of fresh mozzarella, tomatoes, and basil, finished with sea salt, olive oil, and balsamic glaze.",
+        "price": 8.50
+    },
+    {
+        "name": "Vegetarian Bibimbap",
+        "origin": "Korean",
+        "description": "A sizzling rice bowl topped with sautéed vegetables, marinated tofu, pickled radish, and a spicy gochujang sauce.",
+        "price": 12.25
+    },
+    {
+        "name": "Chickpea Tagine",
+        "origin": "North African",
+        "description": "Slow-cooked chickpeas, sweet potatoes, and apricots in a spiced tomato broth with cinnamon and cumin.",
+        "price": 11.95
+    },
+    {
+        "name": "Greek Spanakopita",
+        "origin": "Mediterranean",
+        "description": "Flaky phyllo pastry stuffed with spinach, feta cheese, onions, and herbs, baked until golden and crispy.",
+        "price": 9.75
+    },
+    {
+        "name": "Vegetarian Biryani",
+        "origin": "Indian",
+        "description": "Aromatic basmati rice cooked with mixed vegetables, saffron, and fragrant spices, served with cooling raita.",
+        "price": 13.25
+    },
+    {
+        "name": "Vegetable Gyoza",
+        "origin": "Japanese",
+        "description": "Pan-fried dumplings filled with cabbage, carrots, and shiitake mushrooms, served with a soy dipping sauce.",
+        "price": 7.95
+    },
+    {
+        "name": "Tofu Stir Fry",
+        "origin": "Asian",
+        "description": "Crispy tofu cubes tossed in garlic-ginger sauce with seasonal vegetables over steamed jasmine rice.",
+        "price": 10.99
+    },
+    {
+        "name": "Vegetarian Paella",
+        "origin": "Spanish",
+        "description": "A saffron-infused rice dish with roasted vegetables, chickpeas, and artichoke hearts cooked in vegetable stock.",
+        "price": 14.50
+    }
 ]
+
 
 def generate_dish_description(dish_name, cuisine, spice):
     """
