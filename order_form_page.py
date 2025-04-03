@@ -16,6 +16,32 @@ def order_form_page():
     # Create two columns - one for form, one for image
     col1, col2 = st.columns([3, 2])
     
+    # Initialize spice level session state variables for order form page
+    if 'order_spice_percent' not in st.session_state:
+        st.session_state.order_spice_percent = 50
+        
+    if 'order_spice_text' not in st.session_state:
+        st.session_state.order_spice_text = "Medium"
+        
+    if 'order_spice_color' not in st.session_state:
+        st.session_state.order_spice_color = "#FF9800"  # Orange for Medium
+        
+    # Define a callback function to update the spice level indicators
+    def update_spice_indicators():
+        # Get the current value
+        spice_percent = st.session_state.order_spice_percent
+        
+        # Update text and color based on percentage
+        if spice_percent < 33:
+            st.session_state.order_spice_text = "Mild"
+            st.session_state.order_spice_color = "#4CAF50"  # Green
+        elif spice_percent < 66:
+            st.session_state.order_spice_text = "Medium"
+            st.session_state.order_spice_color = "#FF9800"  # Orange
+        else:
+            st.session_state.order_spice_text = "Hot"
+            st.session_state.order_spice_color = "#F44336"  # Red
+    
     with col1:
         # Order form with enhanced styling
         with st.form(key='menu_form', clear_on_submit=True):
@@ -31,39 +57,23 @@ def order_form_page():
                 "American", "Brazilian", "Middle Eastern", "Caribbean", "Australian", "French", "Indonesian"
             ])
             
-            # Spice level selection with percentage slider and dynamic color
-            spice_options = ["Mild", "Medium", "Hot"]
+            # Spice level selection with percentage slider
+            st.slider(
+                "Spice Level", 
+                0, 100, 
+                st.session_state.order_spice_percent, 
+                5, 
+                format="%d%%", 
+                key="order_spice_percent",
+                on_change=update_spice_indicators
+            )
             
-            # Create a slider key for this form instance
-            slider_key = "spice_percent_slider"
-            
-            # Ensure slider_key exists in session state
-            if slider_key not in st.session_state:
-                st.session_state[slider_key] = 50
-            
-            # Create a reactive spice level slider
-            spice_percent = st.slider("Spice Level", 0, 100, st.session_state[slider_key], 5, 
-                                      format="%d%%", key=slider_key)
-            
-            # Map percentage to mild/medium/hot
-            if spice_percent < 33:
-                spice_index = 0  # Mild
-                spice_color = "#4CAF50"  # Green
-            elif spice_percent < 66:
-                spice_index = 1  # Medium
-                spice_color = "#FF9800"  # Orange
-            else:
-                spice_index = 2  # Hot
-                spice_color = "#F44336"  # Red
-                
-            form_spice = spice_options[spice_index]
-            
-            # Display current selection with percentage and color
+            # Show the spice level outside the form so it can be updated in real-time
             st.markdown(
                 f"""
                 <div style='text-align: center; margin-top: 5px; animation: pulse 1.5s infinite;'>
-                    <span style='color: {spice_color}; font-weight: bold; font-size: 1.1rem;'>
-                        {form_spice} ({spice_percent}%)
+                    <span style='color: {st.session_state.order_spice_color}; font-weight: bold; font-size: 1.1rem;'>
+                        {st.session_state.order_spice_text} ({st.session_state.order_spice_percent}%)
                     </span>
                 </div>
                 <style>
@@ -103,7 +113,7 @@ def order_form_page():
             <div style="margin-top: 30px; padding: 20px; background-color: #f0f5f0; border-radius: 10px; border-left: 4px solid #2E8B57;">
                 <h3 style="color: #2E8B57; margin-bottom: 10px;">Your Preference Profile</h3>
                 <p><strong>Cuisine:</strong> {form_cuisine}</p>
-                <p><strong>Spice Level:</strong> <span style="color: {spice_color}; font-weight: bold;">{form_spice} ({spice_percent}%)</span></p>
+                <p><strong>Spice Level:</strong> <span style="color: {st.session_state.order_spice_color}; font-weight: bold;">{st.session_state.order_spice_text} ({st.session_state.order_spice_percent}%)</span></p>
                 <p><strong>Dietary Needs:</strong> {', '.join(dietary_restrictions) if dietary_restrictions else 'None specified'}</p>
             </div>
             """, 
@@ -155,7 +165,7 @@ def order_form_page():
                     
                     # Generate personalized description
                     with st.spinner(f"Customizing {dish['name']} for your preferences..."):
-                        description = generate_dish_description(dish["name"], form_cuisine, form_spice)
+                        description = generate_dish_description(dish["name"], form_cuisine, st.session_state.order_spice_text)
                     
                     st.markdown(f"""
                     <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
