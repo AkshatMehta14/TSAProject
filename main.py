@@ -39,45 +39,103 @@ page = st.sidebar.radio("Go to", ["Restaurant", "Menu", "Order Form", "Food Sour
 
 # --- Page Functions --- #
 def restaurant_page():
-    st.markdown("<div class='header-title'>Vegetarian Restaurant</div>", unsafe_allow_html=True)
-    
-    st.write("""
-        Welcome to our Vegetarian Restaurant – where passion for plant-based cuisine meets culinary artistry.
-        Enjoy a warm and inviting atmosphere, complete with locally sourced organic ingredients and a menu that celebrates the diversity of vegetarian fare.
-        Sit back, relax, and let our carefully crafted dishes delight your palate.
-    """)
-
-    st.markdown("---")
-    
     st.markdown("""
-    ### 🌱 Our Mission
+        <style>
+        .hero {
+            background: linear-gradient(to right, #e8f5e9, #ffffff);
+            padding: 50px 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2E7D32;
+            margin-bottom: 0.5em;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #555;
+        }
+        .section {
+            padding: 40px 10px;
+        }
+        .section h2 {
+            color: #388E3C;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .section p {
+            font-size: 1.05rem;
+            color: #444;
+            max-width: 800px;
+        }
+        .quote {
+            font-style: italic;
+            color: #777;
+            margin-top: 20px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
 
-    At **Verdura**, we believe that food is more than just sustenance — it's a reflection of our values, our environment, and our shared future. Our mission is rooted in the idea that a plant-based lifestyle doesn't have to be restrictive or repetitive. Instead, it can be vibrant, delicious, and filled with joy.
-
-    We aim to create a dining experience that celebrates compassion and sustainability while honoring culinary traditions from around the globe. Each dish is an invitation to explore a more ethical and environmentally responsible way of eating — one that nourishes the body, delights the senses, and supports the planet we all call home.
-    """)
-
-    st.markdown("---")
-
+    # Hero Section
     st.markdown("""
-    ### 🥦 Why Go Vegetarian?
+    <div class='hero'>
+        <h1>Welcome to Verdura 🍃</h1>
+        <p>A global vegetarian experience rooted in sustainability, culture, and flavor. More than a restaurant — it's a movement.</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    Choosing a vegetarian lifestyle is one of the most impactful decisions you can make — not just for your own health, but for the health of the planet. By reducing our reliance on animal agriculture, we dramatically cut greenhouse gas emissions, conserve water, and preserve vital ecosystems. In a world facing climate crises, every plant-based meal is a step toward sustainability.
-
-    But it’s not just about the planet — it’s about you. A vegetarian diet has been linked to reduced risks of heart disease, diabetes, and high blood pressure. It encourages mindful eating, diverse nutrition, and culinary curiosity. It's a lifestyle grounded in balance, wellness, and the belief that what we eat can be both indulgent and intentional.
-    """)
-
-    st.markdown("---")
-
+    # Mission Section
     st.markdown("""
-    ### 📖 Our Story
+    <div class='section'>
+        <h2>🌱 Our Mission</h2>
+        <p>
+            At Verdura, we believe that plant-based food can be just as indulgent as it is intentional. 
+            Our mission is to redefine what it means to eat consciously — one unforgettable dish at a time.
+        </p>
+        <p>
+            We're not just serving meals — we're building a movement toward ecological balance, animal welfare, 
+            and global culinary connection. Our commitment to authenticity, ethics, and artistry shapes everything we do.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    Verdura began as a shared dream between three lifelong friends who believed food could tell stories, spark change, and bring people together. Nina, a sustainability advocate, left her Silicon Valley job to return to her roots — quite literally — on her family’s organic farm. Her passion for regenerative agriculture laid the foundation for what Verdura would become.
+    # Why Vegetarian Section
+    st.markdown("""
+    <div class='section'>
+        <h2>🥦 Why Vegetarian?</h2>
+        <p>
+            Choosing a vegetarian lifestyle is one of the most powerful steps you can take for the planet, your health, 
+            and the lives of countless animals. Each dish at Verdura celebrates this choice through flavor and form.
+        </p>
+        <p>
+            Studies link plant-based diets to lower risks of chronic illness. Environmentally, it reduces carbon emissions, 
+            water use, and deforestation. But it’s more than just stats — it’s about discovering new ingredients, bold spices, 
+            and untold culinary stories.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    Raj, a third-generation chef from Mumbai, brought a mastery of spice and flavor rooted in centuries-old tradition. He envisioned a menu that honored authenticity while daring to be different. And then there was Elena, a food critic turned flavor explorer, who wandered through Mediterranean coastlines and Southeast Asian alleys searching for recipes with soul. Together, they created Verdura: a culinary sanctuary where purpose meets pleasure.
-
-    > _"Vegetarianism is not a restriction — it's a rediscovery."_
-    """)
+    # Story Section
+    st.markdown("""
+    <div class='section'>
+        <h2>📖 Our Story</h2>
+        <p>
+            Verdura began as a vision shared by three dreamers:
+            Nina, a regenerative farmer; Raj, a spice alchemist from Mumbai; and Elena, a Mediterranean food critic on a quest for soul food.
+        </p>
+        <p>
+            They came together not just to start a restaurant, but to create a sanctuary. 
+            A space where purpose meets plate, and every meal tells a story — about people, place, and planet.
+        </p>
+        <p class='quote'>
+            "Vegetarianism is not a restriction — it's a rediscovery."
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 def menu_page():
@@ -114,16 +172,81 @@ def order_form_page():
                 description = generate_dish_description(dish["name"], form_cuisine, form_spice)
             st.markdown(f"**Details:** {description}")
 
+import streamlit.components.v1 as components
+
 def sourcing_page():
-    st.header("From Farm to Table")
-    st.write("""
-        Our commitment to quality begins with sustainable, locally sourced ingredients.
-        We partner with local farmers and organic suppliers who share our passion for ethical, eco-friendly practices.
-        Every ingredient is carefully selected to ensure freshness, flavor, and health benefits.
-        From the farm where the produce is grown to the meticulous preparation in our kitchen,
-        our process guarantees that you receive a meal that is both nourishing and full of character.
-        Enjoy the journey from farm to table – a celebration of nature's bounty and culinary innovation.
-    """)
+    st.markdown("<div class='header-title'>From Farm to Table 🌾</div>", unsafe_allow_html=True)
+
+    stages = [
+        {
+            "title": "🌱 Sowing & Growing",
+            "text": """
+                It all begins on lush, organic farmland where the soil is nourished using compost and natural fertilizers.
+                Seeds are chosen for their biodiversity, and crops are rotated to restore the earth — not deplete it.
+            """,
+            "vanta": "waves",
+            "color": "#88cc88"
+        },
+        {
+            "title": "🐓 Ethical Animal Enclosures",
+            "text": """
+                Our vegetarian philosophy extends to protecting all life. Birds and animals are not caged — they roam free in open-air sanctuaries,
+                contributing to natural compost cycles and pest control. The presence of birds symbolizes balance, not exploitation.
+            """,
+            "vanta": "birds",
+            "color": "#cce5ff"
+        },
+        {
+            "title": "☁️ Aerial Delivery Routes",
+            "text": """
+                When ingredients travel, they fly efficiently. Some rare spices and heirloom grains are delivered via air cargo along curated green routes —
+                flights that offset carbon emissions and optimize fuel efficiency. It's not just fast — it's thoughtful.
+            """,
+            "vanta": "clouds",
+            "color": "#ddeeff"
+        },
+        {
+            "title": "🔥 Cooking in a Tandoor",
+            "text": """
+                Back in the kitchen, ingredients meet fire. We slow-roast vegetables in traditional clay tandoors at 900°F to caramelize flavor while preserving nutrients.
+                Foggy heat rises, spices sizzle — and your dish begins its transformation into magic.
+            """,
+            "vanta": "fog",
+            "color": "#ffcc99"
+        },
+        {
+            "title": "🌍 Served to You with Purpose",
+            "text": """
+                Finally, the dish arrives at your table — hot, ethical, and fully traceable. 
+                Our farm-to-table system reduces emissions, eliminates waste, and supports a regional food economy. 
+                Every plate you enjoy is a vote for sustainability.
+            """,
+            "vanta": "globe",
+            "color": "#222222"  # Dark background for globe effect
+        },
+    ]
+
+    for stage in stages:
+        st.subheader(stage["title"])
+        st.write(stage["text"])
+        components.html(f"""
+            <div id="vanta-{stage["vanta"]}" style="width: 100%; height: 300px; background-color: {stage["color"]};"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.{stage["vanta"]}.min.js"></script>
+            <script>
+              VANTA.{stage["vanta"].upper()}({{
+                el: "#vanta-{stage["vanta"]}",
+                mouseControls: true,
+                touchControls: true,
+                minHeight: 300.00,
+                minWidth: 200.00,
+                scale: 1.0,
+                scaleMobile: 1.0
+              }});
+            </script>
+        """, height=300)
+        st.markdown("---")
+
 
 # --- Page Routing --- #
 if page == "Restaurant":
