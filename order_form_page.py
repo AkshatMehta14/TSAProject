@@ -25,8 +25,8 @@ def order_form_page():
         
     if 'order_spice_color' not in st.session_state:
         st.session_state.order_spice_color = "#FF9800"  # Orange for Medium
-        
-    # Define a callback function to update the spice level indicators
+    
+    # Update spice indicators whenever the slider value changes
     def update_spice_indicators():
         # Get the current value
         spice_percent = st.session_state.order_spice_percent
@@ -42,7 +42,39 @@ def order_form_page():
             st.session_state.order_spice_text = "Hot"
             st.session_state.order_spice_color = "#F44336"  # Red
     
+    # Handle spice level outside of form
     with col1:
+        st.markdown("### Spice Level Preference")
+        # Spice level slider (outside form, so it can have a callback)
+        spice_percent = st.slider(
+            "Adjust spice level", 
+            0, 100, 
+            st.session_state.order_spice_percent, 
+            5, 
+            format="%d%%", 
+            key="order_spice_percent",
+            on_change=update_spice_indicators
+        )
+        
+        # Display spice level indicator
+        st.markdown(
+            f"""
+            <div style='text-align: center; margin-top: 5px; margin-bottom: 20px; animation: pulse 1.5s infinite;'>
+                <span style='color: {st.session_state.order_spice_color}; font-weight: bold; font-size: 1.1rem;'>
+                    {st.session_state.order_spice_text} ({st.session_state.order_spice_percent}%)
+                </span>
+            </div>
+            <style>
+                @keyframes pulse {{
+                    0% {{ opacity: 0.8; }}
+                    50% {{ opacity: 1; }}
+                    100% {{ opacity: 0.8; }}
+                }}
+            </style>
+            """, 
+            unsafe_allow_html=True
+        )
+        
         # Order form with enhanced styling
         with st.form(key='menu_form', clear_on_submit=True):
             st.markdown('<div class="form-header">Fill in your preferences</div>', unsafe_allow_html=True)
@@ -56,36 +88,6 @@ def order_form_page():
                 "Mediterranean", "Lebanese", "Spanish", "German", "British", "North African",
                 "American", "Brazilian", "Middle Eastern", "Caribbean", "Australian", "French", "Indonesian"
             ])
-            
-            # Spice level selection with percentage slider
-            st.slider(
-                "Spice Level", 
-                0, 100, 
-                st.session_state.order_spice_percent, 
-                5, 
-                format="%d%%", 
-                key="order_spice_percent",
-                on_change=update_spice_indicators
-            )
-            
-            # Show the spice level outside the form so it can be updated in real-time
-            st.markdown(
-                f"""
-                <div style='text-align: center; margin-top: 5px; animation: pulse 1.5s infinite;'>
-                    <span style='color: {st.session_state.order_spice_color}; font-weight: bold; font-size: 1.1rem;'>
-                        {st.session_state.order_spice_text} ({st.session_state.order_spice_percent}%)
-                    </span>
-                </div>
-                <style>
-                    @keyframes pulse {{
-                        0% {{ opacity: 0.8; }}
-                        50% {{ opacity: 1; }}
-                        100% {{ opacity: 0.8; }}
-                    }}
-                </style>
-                """, 
-                unsafe_allow_html=True
-            )
             
             # Dietary restrictions multiselect
             dietary_restrictions = st.multiselect(
