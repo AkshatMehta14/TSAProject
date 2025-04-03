@@ -85,9 +85,109 @@ logo_html = """
 st.sidebar.markdown(logo_html, unsafe_allow_html=True)
 st.sidebar.markdown("<div style='height: 20px'></div>", unsafe_allow_html=True)
 
-# Sidebar navigation using radio buttons
+# Sidebar navigation using custom buttons
 st.sidebar.markdown("### Navigation")
-page = st.sidebar.radio("", ["Home", "Menu", "Order Form", "Food Sourcing"])
+
+# Custom CSS for glowing navigation buttons with animations
+st.markdown("""
+<style>
+/* Glowing Button Styles */
+.nav-button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: linear-gradient(135deg, #2E8B57, #3AA76D);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    position: relative;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+.nav-button:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg);
+    z-index: 1;
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.nav-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(46, 139, 87, 0.6);
+}
+
+.nav-button:hover:before {
+    animation: glowingEffect 1.5s infinite;
+}
+
+@keyframes glowingEffect {
+    0% {
+        transform: rotate(45deg) translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        transform: rotate(45deg) translateX(100%);
+        opacity: 0;
+    }
+}
+
+.nav-button.active {
+    background: linear-gradient(135deg, #1A6B37, #2E8B57);
+    box-shadow: 0 0 15px rgba(46, 139, 87, 0.5);
+}
+
+/* Button shake animation */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+.nav-button:active {
+    animation: shake 0.3s ease;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# Session state to track page
+if 'page' not in st.session_state:
+    st.session_state.page = "Home"
+
+# Create custom button styling using Streamlit components
+# Navigation buttons with actual click functionality
+def nav_button(label, page_name):
+    if st.sidebar.button(label, key=f"nav_{page_name}", 
+                        use_container_width=True,
+                        type="primary" if st.session_state.page == page_name else "secondary"):
+        st.session_state.page = page_name
+        st.rerun()  # Rerun the app to refresh the UI
+
+# Add custom animated buttons with actual click functionality
+nav_button("🏠 Home", "Home")
+nav_button("🍽️ Menu", "Menu") 
+nav_button("🛒 Order", "Order Form")
+nav_button("🌱 Sourcing", "Food Sourcing")
+
+# The page variable is now controlled by session state
+page = st.session_state.page
 
 # Add a subtle decoration to the sidebar
 st.sidebar.markdown(

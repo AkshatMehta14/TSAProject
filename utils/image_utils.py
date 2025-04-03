@@ -116,13 +116,56 @@ def image_with_text_overlay(image_url, title, text, overlay_opacity=0.6):
 
 def dish_card(dish, image_url=None):
     """
-    Display a dish as a card with image and details
+    Display a dish as a card with image and details, including spice level
     """
+    # Determine spice level color and label based on spiciness value
+    spiciness = dish.get('spiciness', 0.5)  # Default to medium if not specified
+    
+    # Convert spiciness to percentage for display
+    spice_percent = int(spiciness * 100)
+    
+    # Determine color based on spice level
+    if spiciness < 0.3:
+        spice_color = "#4CAF50"  # Green for mild
+        spice_label = "Mild"
+    elif spiciness < 0.6:
+        spice_color = "#FFC107"  # Amber for medium
+        spice_label = "Medium"
+    else:
+        spice_color = "#F44336"  # Red for spicy
+        spice_label = "Spicy"
+    
+    # Create spice level indicator with fixed CSS animations
+    spice_indicator = f"""
+    <div class="spice-level-container" style="margin: 10px 0; animation: fadeIn 0.5s ease-in;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+            <span style="font-size: 0.85rem;">Spice Level:</span>
+            <span style="font-size: 0.85rem; color: {spice_color}; font-weight: bold;">{spice_label} ({spice_percent}%)</span>
+        </div>
+        <div style="height: 6px; width: 100%; background-color: #f0f0f0; border-radius: 3px; overflow: hidden;">
+            <div style="height: 100%; width: {spice_percent}%; background-color: {spice_color}; 
+                      transition: width 1s ease-in-out; animation: expandWidth 1.5s ease-out;"></div>
+        </div>
+    </div>
+    <style>
+    @keyframes expandWidth {{
+        from {{ width: 0%; }}
+        to {{ width: {spice_percent}%; }}
+    }}
+    @keyframes fadeIn {{
+        from {{ opacity: 0; }}
+        to {{ opacity: 1; }}
+    }}
+    </style>
+    """
+    
+    # Build the card HTML with spice indicator
     card_html = f"""
-    <div class="dish-card">
+    <div class="dish-card" style="transition: transform 0.3s ease; animation: cardEnter 0.5s ease-out;">
         <div class="dish-content">
             <h3 class="dish-name">{dish['name']} <span class="dish-price">${dish['price']:.2f}</span></h3>
             <div class="dish-origin">Origin: {dish['origin']}</div>
+            {spice_indicator}
             <p class="dish-description">{dish['description']}</p>
         </div>
     """
@@ -130,10 +173,25 @@ def dish_card(dish, image_url=None):
     if image_url:
         card_html += f"""
         <div class="dish-image-container">
-            <img src="{image_url}" alt="{dish['name']}" class="dish-image">
+            <img src="{image_url}" alt="{dish['name']}" class="dish-image" style="transition: all 0.5s ease;">
         </div>
         """
     
-    card_html += "</div>"
+    card_html += """
+    </div>
+    <style>
+    @keyframes cardEnter {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .dish-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    .dish-card:hover .dish-image {
+        transform: scale(1.05);
+    }
+    </style>
+    """
     
     st.markdown(card_html, unsafe_allow_html=True)

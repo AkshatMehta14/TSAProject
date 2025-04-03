@@ -3,73 +3,85 @@ sample_dishes = [
         "name": "Paneer Tikka Masala",
         "origin": "Indian",
         "description": "Grilled paneer cubes marinated in yogurt and spices, roasted in a tandoor, then simmered in a creamy tomato-based sauce.",
-        "price": 12.99
+        "price": 12.99,
+        "spiciness": 0.7  # Spicier dish (0-1 scale)
     },
     {
         "name": "Vegetarian Pad Thai",
         "origin": "Thai",
         "description": "Rice noodles stir-fried with tofu, eggs, scallions, bean sprouts, and peanuts in a tangy tamarind sauce.",
-        "price": 11.49
+        "price": 11.49,
+        "spiciness": 0.6  # Medium-high spice
     },
     {
         "name": "Ratatouille",
         "origin": "French",
         "description": "A rustic vegetable stew made with eggplant, zucchini, bell peppers, and tomatoes, slow-cooked with Provencal herbs.",
-        "price": 13.75
+        "price": 13.75,
+        "spiciness": 0.2  # Mild dish
     },
     {
         "name": "Falafel Bowl",
         "origin": "Middle Eastern",
         "description": "Golden-brown falafel balls served over couscous with hummus, pickled vegetables, cucumber salad, and tahini drizzle.",
-        "price": 10.95
+        "price": 10.95,
+        "spiciness": 0.4  # Medium spice
     },
     {
         "name": "Caprese Salad",
         "origin": "Italian",
         "description": "Layers of fresh mozzarella, tomatoes, and basil, finished with sea salt, olive oil, and balsamic glaze.",
-        "price": 8.50
+        "price": 8.50,
+        "spiciness": 0.1  # Very mild
     },
     {
         "name": "Vegetarian Bibimbap",
         "origin": "Korean",
         "description": "A sizzling rice bowl topped with sautéed vegetables, marinated tofu, pickled radish, and a spicy gochujang sauce.",
-        "price": 12.25
+        "price": 12.25,
+        "spiciness": 0.8  # Very spicy
     },
     {
         "name": "Chickpea Tagine",
         "origin": "North African",
         "description": "Slow-cooked chickpeas, sweet potatoes, and apricots in a spiced tomato broth with cinnamon and cumin.",
-        "price": 11.95
+        "price": 11.95,
+        "spiciness": 0.5  # Medium spice
     },
     {
         "name": "Greek Spanakopita",
         "origin": "Mediterranean",
         "description": "Flaky phyllo pastry stuffed with spinach, feta cheese, onions, and herbs, baked until golden and crispy.",
-        "price": 9.75
+        "price": 9.75,
+        "spiciness": 0.2  # Mild dish
     },
     {
         "name": "Vegetarian Biryani",
         "origin": "Indian",
         "description": "Aromatic basmati rice cooked with mixed vegetables, saffron, and fragrant spices, served with cooling raita.",
-        "price": 13.25
+        "price": 13.25,
+        "spiciness": 0.75  # Quite spicy
     },
     {
         "name": "Vegetable Gyoza",
         "origin": "Japanese",
         "description": "Pan-fried dumplings filled with cabbage, carrots, and shiitake mushrooms, served with a soy dipping sauce.",
-        "price": 7.95
+        "price": 7.95,
+        "spiciness": 0.3  # Mild to medium
     },
     {
         "name": "Tofu Stir Fry",
         "origin": "Asian",
         "description": "Crispy tofu cubes tossed in garlic-ginger sauce with seasonal vegetables over steamed jasmine rice.",
-        "price": 10.99
+        "price": 10.99,
+        "spiciness": 0.5  # Medium spice
     },
     {
         "name": "Vegetarian Paella",
         "origin": "Spanish",
         "description": "A saffron-infused rice dish with roasted vegetables, chickpeas, and artichoke hearts cooked in vegetable stock.",
-        "price": 14.50
+        "price": 14.50,
+        "spiciness": 0.4  # Medium spice
     }
 ]
 

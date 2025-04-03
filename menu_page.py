@@ -55,19 +55,82 @@ def menu_page():
     """, unsafe_allow_html=True)
     
     # Filter options
-    st.markdown("### Filter By Cuisine")
+    col1, col2 = st.columns([3, 2])
     
-    # Get unique cuisines from sample dishes
-    cuisines = sorted(list(set(dish["origin"] for dish in sample_dishes)))
-    cuisines.insert(0, "All Cuisines")  # Add "All" option at the beginning
+    with col1:
+        st.markdown("### Filter By Cuisine")
+        # Get unique cuisines from sample dishes
+        cuisines = sorted(list(set(dish["origin"] for dish in sample_dishes)))
+        cuisines.insert(0, "All Cuisines")  # Add "All" option at the beginning
+        selected_cuisine = st.selectbox("", cuisines)
     
-    selected_cuisine = st.selectbox("", cuisines)
+    with col2:
+        # Spice level filter with percentage display
+        st.markdown("### Spice Level Preference")
+        
+        # Initialize session state for spice level if not exists
+        if 'spice_level' not in st.session_state:
+            st.session_state.spice_level = 50  # Default to 50%
+        
+        # Create a slider for spice level with percentage
+        spice_level = st.slider("", 0, 100, st.session_state.spice_level, 5, 
+                              format="%d%%", key="spice_slider")
+        st.session_state.spice_level = spice_level
+        
+        # Animated display of spice level
+        spice_color = f"rgba({min(255, spice_level * 2.55)}, {max(0, 255 - spice_level * 2.55)}, 0, 0.8)"
+        # Creating spice level display with proper CSS formatting
+        pulse_css = """
+        <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        </style>
+        """
+        
+        # Apply the animation CSS separately to avoid f-string issues
+        st.markdown(pulse_css, unsafe_allow_html=True)
+        
+        # Then create the spice level indicator with variables properly interpolated
+        st.markdown(f"""
+        <div style="margin-top: 10px; animation: pulse 2s infinite;">
+            <div style="background: linear-gradient(to right, #e0f2e9 0%, {spice_color} {spice_level}%, #f0f0f0 {spice_level}%, #f0f0f0 100%); 
+                 height: 12px; border-radius: 6px; transition: all 0.5s ease;">
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                <span style="font-size: 0.8rem; color: #888;">Mild</span>
+                <span style="font-size: 0.8rem; font-weight: bold; color: {spice_color};">{spice_level}%</span>
+                <span style="font-size: 0.8rem; color: #888;">Spicy</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # Filter dishes based on selection
+    # Filter dishes based on cuisine selection
     if selected_cuisine == "All Cuisines":
         filtered_dishes = sample_dishes
     else:
         filtered_dishes = [dish for dish in sample_dishes if dish["origin"] == selected_cuisine]
+    
+    # Further filter based on spice level preference (using the spiciness field from the dish data)
+    # Adjust the spice threshold based on the user's preference
+    spice_tolerance = spice_level / 100  # Convert percentage to decimal
+    
+    # Filter dishes based on spice tolerance
+    spice_filtered_dishes = []
+    for dish in filtered_dishes:
+        # Assume spiciness is a field in dish data that ranges from 0 to 1
+        # If dish doesn't have spiciness field, assume medium (0.5)
+        dish_spiciness = dish.get("spiciness", 0.5)
+        
+        # Include dish if it matches the user's spice preference
+        # More spicy dishes are shown to users with high spice tolerance
+        if dish_spiciness <= spice_tolerance + 0.2:  # A bit of tolerance to show more dishes
+            spice_filtered_dishes.append(dish)
+            
+    # Update the filtered dishes list
+    filtered_dishes = spice_filtered_dishes
     
     # Group dishes by cuisine
     cuisine_groups = {}
