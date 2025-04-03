@@ -31,10 +31,23 @@ def order_form_page():
                 "American", "Brazilian", "Middle Eastern", "Caribbean", "Australian", "French", "Indonesian"
             ])
             
-            # Spice level selection with slider
+            # Spice level selection with percentage slider
             spice_options = ["Mild", "Medium", "Hot"]
-            spice_index = st.slider("Spice Level", 0, 2, 1)
+            spice_percent = st.slider("Spice Level", 0, 100, 50, 5, format="%d%%")
+            
+            # Map percentage to mild/medium/hot
+            if spice_percent < 33:
+                spice_index = 0  # Mild
+            elif spice_percent < 66:
+                spice_index = 1  # Medium
+            else:
+                spice_index = 2  # Hot
+                
             form_spice = spice_options[spice_index]
+            
+            # Display current selection with percentage
+            st.markdown(f"<div style='text-align: center; margin-top: 5px;'><strong>{form_spice}</strong> ({spice_percent}%)</div>", 
+                       unsafe_allow_html=True)
             
             # Dietary restrictions multiselect
             dietary_restrictions = st.multiselect(
@@ -62,7 +75,7 @@ def order_form_page():
             <div style="margin-top: 30px; padding: 20px; background-color: #f0f5f0; border-radius: 10px; border-left: 4px solid #2E8B57;">
                 <h3 style="color: #2E8B57; margin-bottom: 10px;">Your Preference Profile</h3>
                 <p><strong>Cuisine:</strong> {form_cuisine}</p>
-                <p><strong>Spice Level:</strong> {form_spice}</p>
+                <p><strong>Spice Level:</strong> {form_spice} ({spice_percent}%)</p>
                 <p><strong>Dietary Needs:</strong> {', '.join(dietary_restrictions) if dietary_restrictions else 'None specified'}</p>
             </div>
             """, 
