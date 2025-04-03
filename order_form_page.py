@@ -31,23 +31,51 @@ def order_form_page():
                 "American", "Brazilian", "Middle Eastern", "Caribbean", "Australian", "French", "Indonesian"
             ])
             
-            # Spice level selection with percentage slider
+            # Spice level selection with percentage slider and dynamic color
             spice_options = ["Mild", "Medium", "Hot"]
-            spice_percent = st.slider("Spice Level", 0, 100, 50, 5, format="%d%%")
+            
+            # Create a slider key for this form instance
+            slider_key = "spice_percent_slider"
+            
+            # Ensure slider_key exists in session state
+            if slider_key not in st.session_state:
+                st.session_state[slider_key] = 50
+            
+            # Create a reactive spice level slider
+            spice_percent = st.slider("Spice Level", 0, 100, st.session_state[slider_key], 5, 
+                                      format="%d%%", key=slider_key)
             
             # Map percentage to mild/medium/hot
             if spice_percent < 33:
                 spice_index = 0  # Mild
+                spice_color = "#4CAF50"  # Green
             elif spice_percent < 66:
                 spice_index = 1  # Medium
+                spice_color = "#FF9800"  # Orange
             else:
                 spice_index = 2  # Hot
+                spice_color = "#F44336"  # Red
                 
             form_spice = spice_options[spice_index]
             
-            # Display current selection with percentage
-            st.markdown(f"<div style='text-align: center; margin-top: 5px;'><strong>{form_spice}</strong> ({spice_percent}%)</div>", 
-                       unsafe_allow_html=True)
+            # Display current selection with percentage and color
+            st.markdown(
+                f"""
+                <div style='text-align: center; margin-top: 5px; animation: pulse 1.5s infinite;'>
+                    <span style='color: {spice_color}; font-weight: bold; font-size: 1.1rem;'>
+                        {form_spice} ({spice_percent}%)
+                    </span>
+                </div>
+                <style>
+                    @keyframes pulse {{
+                        0% {{ opacity: 0.8; }}
+                        50% {{ opacity: 1; }}
+                        100% {{ opacity: 0.8; }}
+                    }}
+                </style>
+                """, 
+                unsafe_allow_html=True
+            )
             
             # Dietary restrictions multiselect
             dietary_restrictions = st.multiselect(
@@ -75,7 +103,7 @@ def order_form_page():
             <div style="margin-top: 30px; padding: 20px; background-color: #f0f5f0; border-radius: 10px; border-left: 4px solid #2E8B57;">
                 <h3 style="color: #2E8B57; margin-bottom: 10px;">Your Preference Profile</h3>
                 <p><strong>Cuisine:</strong> {form_cuisine}</p>
-                <p><strong>Spice Level:</strong> {form_spice} ({spice_percent}%)</p>
+                <p><strong>Spice Level:</strong> <span style="color: {spice_color}; font-weight: bold;">{form_spice} ({spice_percent}%)</span></p>
                 <p><strong>Dietary Needs:</strong> {', '.join(dietary_restrictions) if dietary_restrictions else 'None specified'}</p>
             </div>
             """, 

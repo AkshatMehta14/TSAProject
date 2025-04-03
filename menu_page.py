@@ -77,15 +77,24 @@ def menu_page():
                               format="%d%%", key="spice_slider")
         st.session_state.spice_level = spice_level
         
-        # Animated display of spice level
-        spice_color = f"rgba({min(255, spice_level * 2.55)}, {max(0, 255 - spice_level * 2.55)}, 0, 0.8)"
+        # Determine spice level color based on percentage
+        if spice_level < 33:
+            spice_text = "Mild"
+            spice_color = "#4CAF50"  # Green
+        elif spice_level < 66:
+            spice_text = "Medium"
+            spice_color = "#FF9800"  # Orange
+        else:
+            spice_text = "Hot"
+            spice_color = "#F44336"  # Red
+            
         # Creating spice level display with proper CSS formatting
         pulse_css = """
         <style>
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
         }
         </style>
         """
@@ -95,13 +104,16 @@ def menu_page():
         
         # Then create the spice level indicator with variables properly interpolated
         st.markdown(f"""
-        <div style="margin-top: 10px; animation: pulse 2s infinite;">
+        <div style="margin-top: 10px;">
             <div style="background: linear-gradient(to right, #e0f2e9 0%, {spice_color} {spice_level}%, #f0f0f0 {spice_level}%, #f0f0f0 100%); 
                  height: 12px; border-radius: 6px; transition: all 0.5s ease;">
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 4px;">
                 <span style="font-size: 0.8rem; color: #888;">Mild</span>
-                <span style="font-size: 0.8rem; font-weight: bold; color: {spice_color};">{spice_level}%</span>
+                <span style="font-size: 1.1rem; font-weight: bold; color: {spice_color}; 
+                             animation: pulse 1.5s infinite; text-align: center;">
+                    {spice_text} ({spice_level}%)
+                </span>
                 <span style="font-size: 0.8rem; color: #888;">Spicy</span>
             </div>
         </div>
